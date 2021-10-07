@@ -1,4 +1,4 @@
-## Build and run
+## Build and run (outdated instructions)
 
 Build the Docker image:
 
