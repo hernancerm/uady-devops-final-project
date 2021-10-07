@@ -3,3 +3,8 @@
 
 # Build
 /dist
+
+# Configs
+.env
+.env.*
+!.env.example

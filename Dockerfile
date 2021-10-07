@@ -22,4 +22,4 @@ EXPOSE 8080
 
 # Only one CMD should exist per Dockerfile. It sets the defaults
 # of how an executing container is executed.
-CMD [ "npm", "run", "run" ]
+CMD [ "npm", "run", "start" ]
