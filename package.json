@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "jest ./dist/tests/",
-    "build": "tsc",
+    "test": "jest ./dist/tests",
+    "build": "rm -rf ./dist && tsc",
     "start": "node ./dist/server.js"
   },
   "author": "Hernán Cervera",
