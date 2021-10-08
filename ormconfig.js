@@ -6,5 +6,5 @@ module.exports = {
   password: process.env.PASSWORD,
   database: "uady_sicei",
   entities: ["dist/entities/**/*.js"],
-  synchronize: true,
+  synchronize: false,
 };

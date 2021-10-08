@@ -4,11 +4,11 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "jest ./dist/tests",
+    "test": "jest ./dist/__tests__",
     "build": "rm -rf ./dist && tsc",
     "start": "node ./dist/server.js"
   },
-  "author": "Hernán Cervera",
+  "author": "A. Aguilar, A. Anaya, H. Cervera, E. Concha",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^10.0.0",
