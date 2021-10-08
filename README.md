@@ -1,15 +1,31 @@
-## Build and run (outdated instructions)
+## Configure the database
 
-Build the Docker image:
+Start a local MySQL server and use the following scripts in [`./mysql/`](./mysql):
 
-```txt
-docker image build . -t hercerm/sicei
+- `uady_sicei_schema.sql`: Create the database.
+- `uady_sicei_populate.sql`: Fill the database with some test data.
+
+Place an `.env` file at the root of this project with the database connection config, as shown as example in [`.env.example`](.env.example)
+
+## Build and run
+
+Install dependencies
+
+```text
+npm install
 ```
 
-Run the Docker image:
+Build
 
-```txt
-docker container run -p 49160:8080 -d --name c-hercerm-sicei hercerm/sicei
+```text
+npm run build
 ```
 
-See the list of students: <http://localhost:49160/api/students>
+Run
+
+```text
+npm run start
+```
+
+
+See the list of students: <http://localhost:8080/api/students>
