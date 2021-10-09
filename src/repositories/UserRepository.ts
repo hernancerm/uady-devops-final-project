@@ -1,6 +1,6 @@
-import { Student } from "../entities/Student";
+import { User } from "../entities/User";
 
 import { EntityRepository, Repository } from "typeorm";
 
-@EntityRepository(Student)
-export default class StudentRepository extends Repository<Student> {}
+@EntityRepository(User)
+export default class UserRepository extends Repository<User> {}
