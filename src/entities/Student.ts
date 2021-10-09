@@ -10,4 +10,13 @@ export class Student extends BaseEntity {
 
   @Column()
   last_names: string;
+
+  @Column()
+  birth_date: Date;
+
+  @Column()
+  sex: "M" | "F";
+
+  @Column()
+  enrollment_date: Date;
 }
