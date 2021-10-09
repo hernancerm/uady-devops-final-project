@@ -31,7 +31,7 @@ export const StudentController = (studentRepository: Repository<Student>) => {
 
   const create = async (req: Request, res: Response): Promise<Response> => {
     const providedStudent = req.body;
-    const createdStudent = studentRepository.create(providedStudent);
+    const [createdStudent] = studentRepository.create([providedStudent]);
 
     const errors = await validate(createdStudent);
 
@@ -40,7 +40,10 @@ export const StudentController = (studentRepository: Repository<Student>) => {
     }
 
     try {
-      const savedStudent = await studentRepository.save(createdStudent);
+      const { enrollmentId: savedStudentId } = await studentRepository.save(
+        createdStudent
+      );
+      const savedStudent = await studentRepository.findOne(savedStudentId);
       return res.status(200).json(savedStudent);
     } catch (error) {
       return res.status(500).json({ error: "Unexpected DB error" });
@@ -63,7 +66,10 @@ export const StudentController = (studentRepository: Repository<Student>) => {
           return res.status(400).json({ error: "Invalid student", errors });
         }
 
-        const savedStudent = await studentRepository.save(student);
+        const { enrollmentId: savedStudentId } = await studentRepository.save(
+          student
+        );
+        const savedStudent = await studentRepository.findOne(savedStudentId);
         return res.status(200).json(savedStudent);
       }
       return res.status(404).json({ error: "Student not found" });
