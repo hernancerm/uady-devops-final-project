@@ -1,4 +1,4 @@
-import studentRouter from "./routers/student.router";
+import { StudentRouter } from "./routers/impl/StudentRouter";
 
 import "reflect-metadata";
 import express from "express";
@@ -8,9 +8,10 @@ const PORT = 8080;
 const HOST = "0.0.0.0";
 
 const app = express();
-createConnection();
 
-app.use("/api", studentRouter);
+createConnection().then(() => {
+  app.use("/api", StudentRouter().getAssembledRouter());
+});
 
 app.listen(PORT, HOST);
 

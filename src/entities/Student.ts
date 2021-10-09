@@ -3,7 +3,7 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export class Student extends BaseEntity {
   @PrimaryGeneratedColumn()
-  enrollmentId: number;
+  enrollment_id: number;
 
   @Column()
   first_names: string;
