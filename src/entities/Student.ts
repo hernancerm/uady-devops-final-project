@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { IsDate, IsIn, IsNotEmpty, IsString, MaxDate } from "class-validator";
+import { IsIn, IsNotEmpty, IsString } from "class-validator";
 
 @Entity()
 export class Student extends BaseEntity {

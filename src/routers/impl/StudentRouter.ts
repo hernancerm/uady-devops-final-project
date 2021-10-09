@@ -10,13 +10,17 @@ export const StudentRouter = (): RouterAssembler => {
     getCustomRepository(StudentRepository)
   );
 
-  // TODO: don't repeat /students
   const router = Router();
-  router.route("/students").get(studentController.getAll);
-  router.route("/students/:studentId").get(studentController.getById);
-  router.route("/students").post(studentController.create);
-  router.route("/students/:studentId").put(studentController.update);
-  router.route("/students/:studentId").delete(studentController.deleteById);
+  router
+    .route("/students")
+    .get(studentController.getAll)
+    .post(studentController.create);
+
+  router
+    .route("/students/:studentId")
+    .get(studentController.getById)
+    .put(studentController.update)
+    .delete(studentController.deleteById);
 
   return { getAssembledRouter: () => router };
 };
