@@ -2,29 +2,48 @@ import { Student } from "../entities/Student";
 
 import { Request, Response } from "express";
 import { Repository } from "typeorm";
+import { validate } from "class-validator";
 
-// TODO: Add try / catch
 export const StudentController = (studentRepository: Repository<Student>) => {
   const getAll = async (req: Request, res: Response): Promise<Response> => {
-    const students = await studentRepository.find();
-    return res.status(200).json(students);
+    try {
+      const students = await studentRepository.find();
+      return res.status(200).json(students);
+    } catch (error) {
+      return res.status(500).json({ error: "Unexpected DB error" });
+    }
   };
 
   const getById = async (req: Request, res: Response): Promise<Response> => {
-    const student = await studentRepository.findOne(req.params.studentId);
-    return res.status(200).json(student);
+    const studentId = req.params.studentId;
+
+    try {
+      const student = await studentRepository.findOne(studentId);
+
+      if (student) {
+        return res.status(200).json(student);
+      }
+      return res.status(404).json({ error: "Student not found" });
+    } catch (error) {
+      return res.status(500).json({ error: "Unexpected DB error" });
+    }
   };
 
   const create = async (req: Request, res: Response): Promise<Response> => {
     const providedStudent = req.body;
+    const createdStudent = studentRepository.create(providedStudent);
+
+    const errors = await validate(createdStudent);
+
+    if (errors.length > 0) {
+      return res.status(400).json({ error: "Invalid student", errors });
+    }
 
     try {
-      const savedStudent = await studentRepository.save(providedStudent);
+      const savedStudent = await studentRepository.save(createdStudent);
       return res.status(200).json(savedStudent);
     } catch (error) {
-      const errorMessage = `Unexpected DB error creating student with data: ${providedStudent}`;
-      console.error(errorMessage, error);
-      return res.status(500).json({ message: errorMessage });
+      return res.status(500).json({ error: "Unexpected DB error" });
     }
   };
 
@@ -37,14 +56,19 @@ export const StudentController = (studentRepository: Repository<Student>) => {
 
       if (student) {
         studentRepository.merge(student, providedStudent);
+
+        const errors = await validate(student);
+
+        if (errors.length > 0) {
+          return res.status(400).json({ error: "Invalid student", errors });
+        }
+
         const savedStudent = await studentRepository.save(student);
         return res.status(200).json(savedStudent);
       }
-      return res.status(404).json({ message: "Student not found" });
+      return res.status(404).json({ error: "Student not found" });
     } catch (error) {
-      const errorMessage = `Unexpected DB error updating student with id ${studentId} with data: ${providedStudent}`;
-      console.error(errorMessage, error);
-      return res.status(500).json({ message: errorMessage });
+      return res.status(500).json({ error: "Unexpected DB error" });
     }
   };
 
@@ -56,9 +80,7 @@ export const StudentController = (studentRepository: Repository<Student>) => {
       await studentRepository.delete(studentId);
       return res.status(204);
     } catch (error) {
-      const errorMessage = `Unexpected DB error deleting student with id: ${studentId}`;
-      console.error(errorMessage, error);
-      return res.status(500).json({ message: errorMessage });
+      return res.status(500).json({ error: "Unexpected DB error" });
     }
   };
 
