@@ -72,13 +72,17 @@ export const StudentController = (studentRepository: Repository<Student>) => {
     }
   };
 
-  // TODO: Fix why it hangs
   const deleteById = async (req: Request, res: Response): Promise<Response> => {
     const studentId = req.params.studentId;
 
     try {
-      await studentRepository.delete(studentId);
-      return res.status(204);
+      const fetchedStudent = await studentRepository.findOne(studentId);
+
+      if (fetchedStudent) {
+        await studentRepository.delete(studentId);
+        return res.status(204).json();
+      }
+      return res.status(404).json({ error: "Student not found" });
     } catch (error) {
       return res.status(500).json({ error: "Unexpected DB error" });
     }
