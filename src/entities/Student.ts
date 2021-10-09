@@ -1,5 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
+// TODO: Add entity validation
 @Entity()
 export class Student extends BaseEntity {
   @PrimaryGeneratedColumn()
