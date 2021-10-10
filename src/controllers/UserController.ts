@@ -10,7 +10,7 @@ export const UserController = (userRepository: Repository<User>) => {
     return res.status(200).json(users);
   };
 
-  const post = async (req: Request, res: Response): Promise<Response> => {
+  const signUp = async (req: Request, res: Response): Promise<Response> => {
     const providedUser = Object.assign(new User(), req.body);
 
     const salt = await bcrypt.genSalt(10);
@@ -28,5 +28,5 @@ export const UserController = (userRepository: Repository<User>) => {
     }
   };
 
-  return { getAll, post };
+  return { getAll, signUp };
 };

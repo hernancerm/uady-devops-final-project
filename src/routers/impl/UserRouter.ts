@@ -10,7 +10,7 @@ export const UserRouter = (): RouterAssembler => {
 
   const router = Router();
   router.route("/users").get(userController.getAll);
-  router.route("/auth/signup").post(userController.post);
+  router.route("/auth/signup").post(userController.signUp);
 
   return { getAssembledRouter: () => router };
 };
