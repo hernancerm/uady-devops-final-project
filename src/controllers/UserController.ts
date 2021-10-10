@@ -11,10 +11,10 @@ export const UserController = (userRepository: Repository<User>) => {
   };
 
   const post = async (req: Request, res: Response): Promise<Response> => {
-    console.log("body: ", req.body);
     const providedUser = Object.assign(new User(), req.body);
+
     const salt = await bcrypt.genSalt(10);
-    // now we set user password to hashed password
+
     const hashedPassword = await bcrypt.hash(providedUser.password, salt);
 
     try {
