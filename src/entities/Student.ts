@@ -1,13 +1,31 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { IsIn, IsNotEmpty, IsString } from "class-validator";
 
 @Entity()
 export class Student extends BaseEntity {
   @PrimaryGeneratedColumn()
-  enrollment_id: number;
+  enrollmentId: number;
 
   @Column()
-  first_names: string;
+  @IsNotEmpty()
+  @IsString()
+  firstNames: string;
 
   @Column()
-  last_names: string;
+  @IsNotEmpty()
+  @IsString()
+  lastNames: string;
+
+  @Column()
+  @IsNotEmpty()
+  birthDate: Date;
+
+  @Column()
+  @IsNotEmpty()
+  @IsIn(["M", "F"])
+  sex: "M" | "F";
+
+  @Column()
+  @IsNotEmpty()
+  enrollmentDate: Date;
 }

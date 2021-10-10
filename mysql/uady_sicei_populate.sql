@@ -1,6 +1,11 @@
 USE uady_sicei;
 
 # Insert students
-INSERT INTO student (first_names, last_names) VALUES ("Juan", "García");
-INSERT INTO student (first_names, last_names) VALUES ("Sofía", "Palmira");
-INSERT INTO student (first_names, last_names) VALUES ("Pedro", "Escalante");
+INSERT INTO student (first_names, last_names, birth_date, sex, enrollment_date)
+  VALUES ("Juan", "García", "1997-03-01", "M", "2017-08-12");
+INSERT INTO student (first_names, last_names, birth_date, sex, enrollment_date)
+  VALUES ("Sofía", "Palmira", "1998-07-14", "F", "2017-08-12");
+INSERT INTO student (first_names, last_names, birth_date, sex, enrollment_date)
+  VALUES ("Pedro", "Escalante", "1998-09-12", "M", "2017-08-12");
+INSERT INTO student (first_names, last_names, birth_date, sex, enrollment_date)
+  VALUES ("Eduardo", "Montalvo", "1999-03-11", "M", "2017-08-12");
