@@ -9,6 +9,7 @@ const PORT = 8080;
 const HOST = "0.0.0.0";
 
 const app = express();
+app.use(express.json());
 
 createConnection().then(() => {
   app.use("/api", StudentRouter().getAssembledRouter());

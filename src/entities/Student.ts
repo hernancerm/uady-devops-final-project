@@ -6,18 +6,38 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { IsIn, IsNotEmpty, IsString } from "class-validator";
 import { Course } from "./Course";
 
 @Entity()
 export class Student extends BaseEntity {
   @PrimaryGeneratedColumn()
-  enrollment_id: number;
+  enrollmentId: number;
 
   @Column()
-  first_names: string;
+  @IsNotEmpty()
+  @IsString()
+  firstNames: string;
 
   @Column()
   last_names: string;
+
+  @IsNotEmpty()
+  @IsString()
+  lastNames: string;
+
+  @Column()
+  @IsNotEmpty()
+  birthDate: Date;
+
+  @Column()
+  @IsNotEmpty()
+  @IsIn(["M", "F"])
+  sex: "M" | "F";
+
+  @Column()
+  @IsNotEmpty()
+  enrollmentDate: Date;
 
   @ManyToOne(() => Course, (course) => course.students)
   @JoinColumn({

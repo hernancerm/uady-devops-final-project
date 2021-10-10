@@ -1,3 +1,5 @@
+const { SnakeNamingStrategy } = require("typeorm-naming-strategies");
+
 module.exports = {
   type: "mysql",
   host: process.env.HOST,
@@ -7,4 +9,5 @@ module.exports = {
   database: "uady_sicei",
   entities: ["dist/entities/**/*.js"],
   synchronize: false,
+  namingStrategy: new SnakeNamingStrategy(),
 };
