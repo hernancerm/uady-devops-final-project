@@ -12,5 +12,6 @@ CREATE TABLE student(
     enrollment_id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
     first_names VARCHAR(30) NOT NULL,
     last_names VARCHAR(30) NOT NULL,
+    course_id INTEGER NOT NULL,
     FOREIGN KEY (course_id) REFERENCES course(id) ON UPDATE CASCADE
 );
