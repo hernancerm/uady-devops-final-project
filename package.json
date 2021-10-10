@@ -6,11 +6,14 @@
   "scripts": {
     "test": "jest ./dist/__tests__",
     "build": "rm -rf ./dist && tsc",
-    "start": "node ./dist/server.js"
+    "start": "node ./dist/server.js",
+    "dev": "DEBUG=express:* && ts-node ./src/server.ts"
   },
   "author": "A. Aguilar, A. Anaya, H. Cervera, E. Concha",
   "license": "ISC",
   "dependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mysql": "^2.18.1",
