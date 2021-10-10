@@ -1,4 +1,5 @@
 import { StudentRouter } from "./routers/impl/StudentRouter";
+import { CourseRouter } from "./routers/impl/CourseRouter";
 
 import "reflect-metadata";
 import express from "express";
@@ -11,6 +12,7 @@ const app = express();
 
 createConnection().then(() => {
   app.use("/api", StudentRouter().getAssembledRouter());
+  app.use("/api", CourseRouter().getAssembledRouter());
 });
 
 app.listen(PORT, HOST);
