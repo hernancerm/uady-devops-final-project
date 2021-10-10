@@ -4,13 +4,15 @@ import { RouterAssembler } from "../RouterAssembler";
 
 import { Router } from "express";
 import { getCustomRepository } from "typeorm";
+import { AuthMiddleware } from "../../middlewares/AuthMiddleware";
 
 export const UserRouter = (): RouterAssembler => {
   const userController = UserController(getCustomRepository(UserRepository));
-
+  const authenticateJWT = AuthMiddleware().authenticateJWT;
   const router = Router();
-  router.route("/users").get(userController.getAll);
   router.route("/auth/signup").post(userController.post);
-
+  router.route("/auth/login").post(userController.getToken);
+  router.use(authenticateJWT);
+  router.route("/users").get(userController.getAll);
   return { getAssembledRouter: () => router };
 };

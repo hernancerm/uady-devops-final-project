@@ -4,6 +4,7 @@ import { RouterAssembler } from "../RouterAssembler";
 
 import { Router } from "express";
 import { getCustomRepository } from "typeorm";
+import { AuthMiddleware } from "../../middlewares/AuthMiddleware";
 
 export const StudentRouter = (): RouterAssembler => {
   const studentController = StudentController(
@@ -13,6 +14,9 @@ export const StudentRouter = (): RouterAssembler => {
   const BASE_PATH = "/students";
 
   const router = Router();
+  const authenticateJWT = AuthMiddleware().authenticateJWT;
+  router.use(authenticateJWT);
+
   router
     .route(BASE_PATH)
     .get(studentController.getAll)
