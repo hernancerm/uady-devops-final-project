@@ -12,11 +12,8 @@ const app = express();
 app.use(express.json());
 
 createConnection().then(() => {
-  app.use(
-    "/api",
-    StudentRouter().getAssembledRouter(),
-    UserRouter().getAssembledRouter()
-  );
+  app.use("/api", StudentRouter().getAssembledRouter());
+  app.use("/api", UserRouter().getAssembledRouter());
 });
 
 app.listen(PORT, HOST);
