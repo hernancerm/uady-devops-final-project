@@ -19,9 +19,6 @@ export class Student extends BaseEntity {
   @IsString()
   firstNames: string;
 
-  @Column()
-  last_names: string;
-
   @IsNotEmpty()
   @IsString()
   lastNames: string;

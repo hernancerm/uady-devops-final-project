@@ -16,17 +16,17 @@ export class Course extends BaseEntity {
   @Column()
   @IsNotEmpty()
   @IsString()
-  course_name: string;
+  courseName: string;
 
   @Column()
   @IsNotEmpty()
   @IsString()
-  course_tag_id: string;
+  courseTagId: string;
 
   @Column()
   @IsNotEmpty()
   @IsString()
-  professor_name: string;
+  professorName: string;
 
   @OneToMany(() => Student, (student) => student.course, {
     cascade: ["insert", "update"],
