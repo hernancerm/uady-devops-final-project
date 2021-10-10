@@ -1,10 +1,10 @@
 import { User } from "../entities/User";
-import { UserRepository } from "../repositories/UserRepository";
 import bcrypt from "bcrypt";
 
 import { Request, Response } from "express";
+import { Repository } from "typeorm";
 
-export const UserController = (userRepository: UserRepository) => {
+export const UserController = (userRepository: Repository<User>) => {
   const getAll = async (req: Request, res: Response): Promise<Response> => {
     const users = await userRepository.find();
     return res.status(200).json(users);
