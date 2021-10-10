@@ -7,8 +7,8 @@ import { validate } from "class-validator";
 export const StudentController = (studentRepository: Repository<Student>) => {
   const getAll = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const students = await studentRepository.find();
-      return res.status(200).json(students);
+      const fetchedStudents = await studentRepository.find();
+      return res.status(200).json(fetchedStudents);
     } catch (error) {
       return res.status(500).json({ error: "Unexpected DB error" });
     }
@@ -18,10 +18,10 @@ export const StudentController = (studentRepository: Repository<Student>) => {
     const studentId = req.params.studentId;
 
     try {
-      const student = await studentRepository.findOne(studentId);
+      const fetchedStudent = await studentRepository.findOne(studentId);
 
-      if (student) {
-        return res.status(200).json(student);
+      if (fetchedStudent) {
+        return res.status(200).json(fetchedStudent);
       }
       return res.status(404).json({ error: "Student not found" });
     } catch (error) {
@@ -30,10 +30,9 @@ export const StudentController = (studentRepository: Repository<Student>) => {
   };
 
   const create = async (req: Request, res: Response): Promise<Response> => {
-    const providedStudent = req.body;
-    const [createdStudent] = studentRepository.create([providedStudent]);
+    const providedStudent = Object.assign(new Student(), req.body);
 
-    const errors = await validate(createdStudent);
+    const errors = await validate(providedStudent);
 
     if (errors.length > 0) {
       return res.status(400).json({ error: "Invalid student", errors });
@@ -41,10 +40,10 @@ export const StudentController = (studentRepository: Repository<Student>) => {
 
     try {
       const { enrollmentId: savedStudentId } = await studentRepository.save(
-        createdStudent
+        providedStudent
       );
       const savedStudent = await studentRepository.findOne(savedStudentId);
-      return res.status(200).json(savedStudent);
+      return res.status(201).json(savedStudent);
     } catch (error) {
       return res.status(500).json({ error: "Unexpected DB error" });
     }
@@ -55,19 +54,19 @@ export const StudentController = (studentRepository: Repository<Student>) => {
     const providedStudent = req.body;
 
     try {
-      const student = await studentRepository.findOne(studentId);
+      const fetchedStudent = await studentRepository.findOne(studentId);
 
-      if (student) {
-        studentRepository.merge(student, providedStudent);
+      if (fetchedStudent) {
+        Object.assign(fetchedStudent, providedStudent);
 
-        const errors = await validate(student);
+        const errors = await validate(fetchedStudent);
 
         if (errors.length > 0) {
           return res.status(400).json({ error: "Invalid student", errors });
         }
 
         const { enrollmentId: savedStudentId } = await studentRepository.save(
-          student
+          fetchedStudent
         );
         const savedStudent = await studentRepository.findOne(savedStudentId);
         return res.status(200).json(savedStudent);
