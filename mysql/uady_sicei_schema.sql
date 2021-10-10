@@ -5,7 +5,7 @@ CREATE TABLE course(
     id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
     course_name VARCHAR(30) NOT NULL,
     course_tag_id VARCHAR(30) NOT NULL,
-    professor_name VARCHAR(30) NOT NULL,    
+    professor_name VARCHAR(30) NOT NULL    
 );
 
 CREATE TABLE student(
@@ -14,7 +14,7 @@ CREATE TABLE student(
     last_names VARCHAR(30) NOT NULL,
     birth_date DATE NOT NULL,
     sex VARCHAR(1) NOT NULL,
-    enrollment_date DATE NOT NULL
+    enrollment_date DATE NOT NULL,
     course_id INTEGER NOT NULL,
     FOREIGN KEY (course_id) REFERENCES course(id) ON UPDATE CASCADE
 );
