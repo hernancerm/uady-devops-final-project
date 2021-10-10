@@ -4,36 +4,41 @@ import { StudentController } from "../../controllers/StudentController";
 import { getMockReq, getMockRes } from "@jest-mock/express";
 import "regenerator-runtime/runtime";
 import { Repository } from "typeorm";
-import { mock, MockProxy } from "jest-mock-extended";
+import { mock, MockProxy, mockReset } from "jest-mock-extended";
+import { Builder } from "builder-pattern";
 
 let mockStudentRepository: MockProxy<Repository<Student>>;
 
 let studentController: any; // SUT
 
-beforeEach(() => {
+beforeAll(() => {
   mockStudentRepository = mock<Repository<Student>>();
   studentController = StudentController(mockStudentRepository);
 });
 
+afterEach(() => {
+  mockReset(mockStudentRepository);
+});
+
 test("getAll - 200", async () => {
   // setup - data
-  const students: Student[] = [
-    Object.assign(new Student(), {
-      enrollmentId: 1,
-      firstNames: "Pedro",
-      lastNames: "Pool",
-      birthDate: "2021-01-01",
-      sex: "M",
-      enrollmentDate: "2017-01-01",
-    }),
-    Object.assign(new Student(), {
-      enrollmentId: 2,
-      firstNames: "Juan",
-      lastNames: "Molina",
-      birthDate: "2021-01-01",
-      sex: "M",
-      enrollmentDate: "2017-01-01",
-    }),
+  const students = [
+    Builder(Student)
+      .enrollmentId(1)
+      .firstNames("Pedro")
+      .lastNames("Pool")
+      .birthDate(new Date("2021-01-01"))
+      .sex("M")
+      .enrollmentDate(new Date("2017-01-01"))
+      .build(),
+    Builder(Student)
+      .enrollmentId(2)
+      .firstNames("Juan")
+      .lastNames("Molina")
+      .birthDate(new Date("2021-01-01"))
+      .sex("M")
+      .enrollmentDate(new Date("2017-01-01"))
+      .build(),
   ];
 
   // setup - mocks
@@ -54,14 +59,14 @@ test("getAll - 200", async () => {
 
 test("getById - 200", async () => {
   // setup - data
-  const student: Student = Object.assign(new Student(), {
-    enrollmentId: 1,
-    firstNames: "Pedro",
-    lastNames: "Pool",
-    birthDate: "2021-01-01",
-    sex: "M",
-    enrollmentDate: "2017-01-01",
-  });
+  const student = Builder(Student)
+    .enrollmentId(1)
+    .firstNames("Pedro")
+    .lastNames("Pool")
+    .birthDate(new Date("2021-01-01"))
+    .sex("M")
+    .enrollmentDate(new Date("2017-01-01"))
+    .build();
 
   // setup - mocks
   mockStudentRepository.findOne.mockReturnValueOnce(Promise.resolve(student));
@@ -122,36 +127,36 @@ test("update - 200", async () => {
   const requestBody = {
     sex: "F",
   };
-  const fetchedStudent: Student = Object.assign(new Student(), {
-    firstNames: "Pedro",
-    lastNames: "Pool",
-    birthDate: "2021-01-01",
-    sex: "M",
-    enrollmentDate: "2017-01-01",
-  });
-  const mergedReqBodyFetchedStudent: Student = Object.assign(new Student(), {
-    firstNames: "Pedro",
-    lastNames: "Pool",
-    birthDate: "2021-01-01",
-    sex: "F",
-    enrollmentDate: "2017-01-01",
-  });
-  const savedStudent: Student = Object.assign(new Student(), {
-    enrollmentId: 1,
-    firstNames: "Pedro",
-    lastNames: "Pool",
-    birthDate: "2021-01-01",
-    sex: "F",
-    enrollmentDate: "2017-01-01",
-  });
-  const fetchedSavedStudent: Student = Object.assign(new Student(), {
-    enrollmentId: 1,
-    firstNames: "Pedro",
-    lastNames: "Pool",
-    birthDate: "2021-01-01",
-    sex: "F",
-    enrollmentDate: "2017-01-01",
-  });
+  const fetchedStudent = Builder(Student)
+    .firstNames("Pedro")
+    .lastNames("Pool")
+    .birthDate(new Date("2021-01-01"))
+    .sex("M")
+    .enrollmentDate(new Date("2017-01-01"))
+    .build();
+  const mergedReqBodyFetchedStudent = Builder(Student)
+    .firstNames("Pedro")
+    .lastNames("Pool")
+    .birthDate(new Date("2021-01-01"))
+    .sex("F")
+    .enrollmentDate(new Date("2017-01-01"))
+    .build();
+  const savedStudent = Builder(Student)
+    .enrollmentId(1)
+    .firstNames("Pedro")
+    .lastNames("Pool")
+    .birthDate(new Date("2021-01-01"))
+    .sex("F")
+    .enrollmentDate(new Date("2017-01-01"))
+    .build();
+  const fetchedSavedStudent = Builder(Student)
+    .enrollmentId(1)
+    .firstNames("Pedro")
+    .lastNames("Pool")
+    .birthDate(new Date("2021-01-01"))
+    .sex("F")
+    .enrollmentDate(new Date("2017-01-01"))
+    .build();
 
   // setup - mocks
   mockStudentRepository.findOne.mockReturnValueOnce(
@@ -184,14 +189,14 @@ test("update - 200", async () => {
 
 test("deleteById - 204", async () => {
   // setup - data
-  const student: Student = Object.assign(new Student(), {
-    enrollmentId: 1,
-    firstNames: "Pedro",
-    lastNames: "Pool",
-    birthDate: "2021-01-01",
-    sex: "M",
-    enrollmentDate: "2017-01-01",
-  });
+  const student = Builder(Student)
+    .enrollmentId(1)
+    .firstNames("Pedro")
+    .lastNames("Pool")
+    .birthDate(new Date("2021-01-01"))
+    .sex("M")
+    .enrollmentDate(new Date("2017-01-01"))
+    .build();
 
   // setup - mocks
   mockStudentRepository.findOne.mockReturnValueOnce(Promise.resolve(student));
