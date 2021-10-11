@@ -6,8 +6,7 @@
   "scripts": {
     "test": "jest ./dist/__tests__",
     "build": "rm -rf ./dist && tsc",
-    "start": "node ./dist/server.js",
-    "dev": "DEBUG=express:* && ts-node ./src/server.ts"
+    "start": "node ./dist/server.js"
   },
   "author": "A. Aguilar, A. Anaya, H. Cervera, E. Concha",
   "license": "ISC",
