@@ -47,5 +47,5 @@ export const UserController = (userRepository: Repository<User>) => {
     });
   };
 
-  return { getAll, post, getToken };
+  return { getAll, signUp, getToken };
 };

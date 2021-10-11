@@ -10,8 +10,9 @@ export const UserRouter = (): RouterAssembler => {
   const userController = UserController(getCustomRepository(UserRepository));
   const authenticateJWT = AuthMiddleware().authenticateJWT;
   const router = Router();
-  router.route("/auth/signup").post(userController.post);
+  router.route("/auth/signup").post(userController.signUp);
   router.route("/auth/login").post(userController.getToken);
-  router.route("/users").get(authenticateJWT, userController.getAll);
+  router.use(authenticateJWT);
+  router.route("/users").get( userController.getAll);
   return { getAssembledRouter: () => router };
 };

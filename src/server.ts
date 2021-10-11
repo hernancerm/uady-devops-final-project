@@ -10,13 +10,11 @@ const HOST = "0.0.0.0";
 
 const app = express();
 app.use(express.json());
-const authenticateJWT = AuthMiddleware().authenticateJWT;
 
 createConnection().then(() => {
   app.use(
     "/api",
     UserRouter().getAssembledRouter(),
-    authenticateJWT,
     StudentRouter().getAssembledRouter()
   );
 });
