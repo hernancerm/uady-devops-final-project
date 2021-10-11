@@ -11,8 +11,8 @@ export const StudentRouter = (): RouterAssembler => {
   );
 
   const BASE_PATH = "/students";
-
   const router = Router();
+
   router
     .route(BASE_PATH)
     .get(studentController.getAll)
