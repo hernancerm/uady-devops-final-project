@@ -1,9 +1,4 @@
 import { StudentRouter } from "./routers/impl/StudentRouter";
-<<<<<<< HEAD
-import { CourseRouter } from "./routers/impl/CourseRouter";
-
-=======
->>>>>>> 39b3902a347331c3219bc190fc27d1ec1fa86e76
 import "reflect-metadata";
 import express from "express";
 import { createConnection } from "typeorm";
