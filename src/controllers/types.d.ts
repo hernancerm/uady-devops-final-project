@@ -7,7 +7,7 @@ type TDefaultResponse<V> = (
 ) => Promise<Response<V>>;
 
 type TController<T> = (repository: Repository<T>) => {
-  getAll: TDefaultResponse<T>;
+  getAll: TDefaultResponse<T[]>;
   getById: TDefaultResponse<T>;
   create: TDefaultResponse<T>;
   update: TDefaultResponse<T>;

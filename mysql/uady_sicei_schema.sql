@@ -5,7 +5,9 @@ CREATE TABLE course(
     id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
     course_name VARCHAR(30) NOT NULL,
     course_tag_id VARCHAR(30) NOT NULL,
-    professor_name VARCHAR(30) NOT NULL    
+    professor_name VARCHAR(30) NOT NULL,  
+    class_room_code VARCHAR(30) NOT NULL,
+    has_projector TINYINT(1) NOT NULL
 );
 
 CREATE TABLE student(

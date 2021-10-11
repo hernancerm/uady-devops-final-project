@@ -1,8 +1,10 @@
 USE uady_sicei;
 
 # Insert course
-INSERT INTO course (course_name, course_tag_id, professor_name) VALUES ("Física", "F1", "Fernando Físico");
-INSERT INTO course (course_name, course_tag_id, professor_name) VALUES ("Biología", "B1", "Luis Botánico");
+INSERT INTO course (course_name, course_tag_id, professor_name, class_room_code, has_projector) 
+  VALUES ("Física", "F1", "Fernando Físico", "CC1", 1);
+INSERT INTO course (course_name, course_tag_id, professor_name, class_room_code, has_projector) 
+  VALUES ("Biología", "B1", "Luis Botánico", "CC2", 1);
 
 # Insert students
 INSERT INTO student (first_names, last_names, birth_date, sex, enrollment_date, course_id)

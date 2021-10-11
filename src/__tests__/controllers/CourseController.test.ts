@@ -6,10 +6,11 @@ import "regenerator-runtime/runtime";
 import { Repository } from "typeorm";
 import { mock, MockProxy, mockReset } from "jest-mock-extended";
 import { Builder } from "builder-pattern";
+import { TController } from "../../controllers/types";
 
 let mockCourseRepository: MockProxy<Repository<Course>>;
 
-let courseController: any; // SUT
+let courseController: ReturnType<TController<Course>>; // SUT
 
 beforeAll(() => {
   mockCourseRepository = mock<Repository<Course>>();
