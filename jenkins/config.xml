@@ -1,0 +1,58 @@
+<project>
+<actions/>
+<description/>
+<keepDependencies>false</keepDependencies>
+<properties>
+<com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.34.1">
+<projectUrl>https://github.com/HerCerM/uady-devops-final-project/</projectUrl>
+<displayName/>
+</com.coravy.hudson.plugins.github.GithubProjectProperty>
+</properties>
+<scm class="hudson.plugins.git.GitSCM" plugin="git@4.8.2">
+<configVersion>2</configVersion>
+<userRemoteConfigs>
+<hudson.plugins.git.UserRemoteConfig>
+<url>https://github.com/HerCerM/uady-devops-final-project</url>
+<credentialsId>github1</credentialsId>
+</hudson.plugins.git.UserRemoteConfig>
+</userRemoteConfigs>
+<branches>
+<hudson.plugins.git.BranchSpec>
+<name>*/main</name>
+</hudson.plugins.git.BranchSpec>
+</branches>
+<doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+<submoduleCfg class="empty-list"/>
+<extensions/>
+</scm>
+<canRoam>true</canRoam>
+<disabled>false</disabled>
+<blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+<triggers/>
+<concurrentBuild>false</concurrentBuild>
+<builders>
+<hudson.tasks.BatchFile>
+<command>npm install </command>
+<configuredLocalRules/>
+</hudson.tasks.BatchFile>
+<hudson.tasks.BatchFile>
+<command>npm run build_win</command>
+<configuredLocalRules/>
+</hudson.tasks.BatchFile>
+<hudson.tasks.BatchFile>
+<command>npm run test</command>
+<configuredLocalRules/>
+</hudson.tasks.BatchFile>
+<hudson.tasks.BatchFile>
+<command>setx GIT_BRANCH %GIT_BRANCH% && setx BUILD_NUMBER %BUILD_NUMBER%</command>
+<configuredLocalRules/>
+</hudson.tasks.BatchFile>
+<hudson.plugins.python.Python plugin="python@1.3">
+<command>import os import subprocess import traceback branch_name = os.getenv('GIT_BRANCH') build_number = os.getenv('BUILD_NUMBER') branch_name = branch_name.replace('origin/', '') image_name = "node_uady_sicei:" + branch_name + "-" + build_number old_image_name = "node_uady_sicei:" + branch_name + "-" + str(int(build_number)-1) print("---------using image name: " + image_name) try: subprocess.check_call("docker build -t "+image_name+" .", stderr=subprocess.PIPE, shell=True) try: subprocess.check_call("docker rm -f node_uady_sicei",stderr=subprocess.PIPE, shell=True) subprocess.check_call("docker image rm -f "+old_image_name,stderr=subprocess.PIPE, shell=True) except: print('Failed deleting existing images or containers') #don't fail on removing images or containers, might be first run print(print(traceback.format_exc())) pass subprocess.check_call("docker container run -d -e DB_HOST=host.docker.internal -e DB_PORT=3306 -e DB_USERNAME=root -e DB_PASSWORD=pa$$word1 -e DB_NAME=uady_sicei -p 8081:8080 --name node_uady_sicei "+image_name+" ",stderr=subprocess.PIPE, shell=True) except: print('Failing--------') print(traceback.format_exc()) exit(1)</command>
+<configuredLocalRules/>
+</hudson.plugins.python.Python>
+</builders>
+<publishers/>
+<buildWrappers/>
+</project>
