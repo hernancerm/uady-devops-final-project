@@ -1,11 +1,11 @@
 import { Student } from "../entities/Student";
 
 import { Request, Response } from "express";
-import { Repository } from "typeorm";
 import { validate } from "class-validator";
+import { TController } from "./types";
 
-export const StudentController = (studentRepository: Repository<Student>) => {
-  const getAll = async (req: Request, res: Response): Promise<Response> => {
+export const StudentController: TController<Student> = (studentRepository) => {
+  const getAll = async (req: Request, res: Response) => {
     try {
       const fetchedStudents = await studentRepository.find();
       return res.status(200).json(fetchedStudents);
@@ -14,7 +14,7 @@ export const StudentController = (studentRepository: Repository<Student>) => {
     }
   };
 
-  const getById = async (req: Request, res: Response): Promise<Response> => {
+  const getById = async (req: Request, res: Response) => {
     const studentId = req.params.studentId;
 
     try {
@@ -29,7 +29,7 @@ export const StudentController = (studentRepository: Repository<Student>) => {
     }
   };
 
-  const create = async (req: Request, res: Response): Promise<Response> => {
+  const create = async (req: Request, res: Response) => {
     const providedStudent = Object.assign(new Student(), req.body);
 
     const errors = await validate(providedStudent);
@@ -49,7 +49,7 @@ export const StudentController = (studentRepository: Repository<Student>) => {
     }
   };
 
-  const update = async (req: Request, res: Response): Promise<Response> => {
+  const update = async (req: Request, res: Response) => {
     const studentId = req.params.studentId;
     const providedStudent = req.body;
 
@@ -78,7 +78,7 @@ export const StudentController = (studentRepository: Repository<Student>) => {
     }
   };
 
-  const deleteById = async (req: Request, res: Response): Promise<Response> => {
+  const deleteById = async (req: Request, res: Response) => {
     const studentId = req.params.studentId;
 
     try {
@@ -88,7 +88,7 @@ export const StudentController = (studentRepository: Repository<Student>) => {
         return res.status(404).json({ error: "Student not found" });
       }
       await studentRepository.delete(studentId);
-      return res.status(204).json();
+      return res.status(204).json(fetchedStudent);
     } catch (error) {
       return res.status(500).json({ error: "Unexpected DB error" });
     }
