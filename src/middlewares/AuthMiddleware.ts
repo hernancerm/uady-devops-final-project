@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../entities/User";
-const jwt = require('jsonwebtoken'); //import feo porque no hay type data https://github.com/Microsoft/TypeScript/issues/247
+import jwt from "jsonwebtoken"; 
 const accessTokenSecret = 'youraccesstokensecret';
 
 export const AuthHelper = () => {
@@ -15,7 +15,7 @@ export const AuthMiddleware = () => {
         const authHeader = req.headers.authorization;
         if (authHeader) {
             const token = authHeader.split(' ')[1];
-            jwt.verify(token, accessTokenSecret, function(err: any, user: User) {
+            jwt.verify(token, accessTokenSecret, (err) => {
                 if (err) {
                     return res.sendStatus(403);
                 }

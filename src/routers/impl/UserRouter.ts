@@ -12,7 +12,6 @@ export const UserRouter = (): RouterAssembler => {
   const router = Router();
   router.route("/auth/signup").post(userController.post);
   router.route("/auth/login").post(userController.getToken);
-  router.use(authenticateJWT);
-  router.route("/users").get(userController.getAll);
+  router.route("/users").get(authenticateJWT, userController.getAll);
   return { getAssembledRouter: () => router };
 };
