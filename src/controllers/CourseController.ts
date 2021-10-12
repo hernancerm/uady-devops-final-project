@@ -7,7 +7,9 @@ import { TController } from "./types";
 export const CourseController: TController<Course> = (courseRepository) => {
   const getAll = async (req: Request, res: Response) => {
     try {
-      const fetchedCourses = await courseRepository.find();
+      const fetchedCourses = await courseRepository.find({
+        relations: ["course"],
+      });
       return res.status(200).json(fetchedCourses);
     } catch (error) {
       return res.status(500).json({ error: "Unexpected DB error" });
