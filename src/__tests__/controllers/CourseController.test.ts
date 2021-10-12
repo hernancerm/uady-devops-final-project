@@ -86,6 +86,8 @@ test("create - 201", async () => {
     courseName: "Botánica",
     courseTagId: "BT1",
     professorName: "José Eduardo Planta Flores",
+    classRoomCode: "CC1",
+    hasProjector: true,
   };
   const providedCourse: Course = Object.assign(new Course(), requestBody);
   const savedCourse: Course = Object.assign(new Course(), {
@@ -124,23 +126,31 @@ test("update - 200", async () => {
     .courseName("Botánica")
     .courseTagId("BT1")
     .professorName("José Eduardo Planta Flores")
+    .classRoomCode("CC1")
+    .hasProjector(true)
     .build();
   const mergedReqBodyFetchedCourse = Builder(Course)
     .courseName("Botánica")
     .courseTagId("BT1")
     .professorName("José Eduardo Planta Rosas")
+    .classRoomCode("CC1")
+    .hasProjector(true)
     .build();
   const savedCourse = Builder(Course)
     .id(1)
     .courseName("Botánica")
     .courseTagId("BT1")
     .professorName("José Eduardo Planta Rosas")
+    .classRoomCode("CC1")
+    .hasProjector(true)
     .build();
   const fetchedSavedCourse = Builder(Course)
     .id(1)
     .courseName("Botánica")
     .courseTagId("BT1")
     .professorName("José Eduardo Planta Rosas")
+    .classRoomCode("CC1")
+    .hasProjector(true)
     .build();
 
   // setup - mocks
