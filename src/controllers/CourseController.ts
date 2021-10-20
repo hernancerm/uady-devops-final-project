@@ -3,15 +3,26 @@ import { Course } from "../entities/Course";
 import { Request, Response } from "express";
 import { validate } from "class-validator";
 import { TController } from "./types";
+import { createLogger } from "../loggers/logger";
+
+const LOGGER = createLogger(__filename);
 
 export const CourseController: TController<Course> = (courseRepository) => {
   const getAll = async (req: Request, res: Response) => {
     try {
+      LOGGER.debug(
+        `Repository call: find - params: ${JSON.stringify({
+          relations: ["course"],
+        })} `
+      );
+
       const fetchedCourses = await courseRepository.find({
         relations: ["course"],
       });
       return res.status(200).json(fetchedCourses);
-    } catch (error) {
+    } catch (error: any) {
+      LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
+
       return res.status(500).json({ error: "Unexpected DB error" });
     }
   };
@@ -20,9 +31,13 @@ export const CourseController: TController<Course> = (courseRepository) => {
     const courseId = req.params.courseId;
 
     try {
+      LOGGER.debug(
+        `Repository call: findOne - params: ${JSON.stringify({ courseId })}`
+      );
       const fetchedCourse = await courseRepository.findOne(courseId);
 
       if (!fetchedCourse) {
+        LOGGER.warn(`Course not found`);
         return res.status(404).json({ error: "Course not found" });
       }
       return res.status(200).json(fetchedCourse);
@@ -37,14 +52,21 @@ export const CourseController: TController<Course> = (courseRepository) => {
     const errors = await validate(providedCourse);
 
     if (errors.length > 0) {
+      LOGGER.warn(`${errors.join().trimEnd()}`);
       return res.status(400).json({ error: "Invalid course", errors });
     }
 
     try {
       const { id: savedCourseId } = await courseRepository.save(providedCourse);
+      LOGGER.debug(
+        `Repository call: findOne - params: ${JSON.stringify({
+          savedCourseId,
+        })}`
+      );
       const savedCourse = await courseRepository.findOne(savedCourseId);
       return res.status(201).json(savedCourse);
-    } catch (error) {
+    } catch (error: any) {
+      LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
       return res.status(500).json({ error: "Unexpected DB error" });
     }
   };
@@ -54,9 +76,15 @@ export const CourseController: TController<Course> = (courseRepository) => {
     const providedCourse = req.body;
 
     try {
+      LOGGER.debug(
+        `Repository call: findOne - params: ${JSON.stringify({
+          courseId,
+        })}`
+      );
       const fetchedCourse = await courseRepository.findOne(courseId);
 
       if (!fetchedCourse) {
+        LOGGER.warn(`Course not found`);
         return res.status(404).json({ error: "Course not found" });
       }
 
@@ -69,9 +97,15 @@ export const CourseController: TController<Course> = (courseRepository) => {
       }
 
       const { id: savedCourseId } = await courseRepository.save(fetchedCourse);
+      LOGGER.debug(
+        `Repository call: findOne - params: ${JSON.stringify({
+          savedCourseId,
+        })}`
+      );
       const savedCourse = await courseRepository.findOne(savedCourseId);
       return res.status(200).json(savedCourse);
-    } catch (error) {
+    } catch (error: any) {
+      LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
       return res.status(500).json({ error: "Unexpected DB error" });
     }
   };
@@ -80,14 +114,21 @@ export const CourseController: TController<Course> = (courseRepository) => {
     const courseId = req.params.courseId;
 
     try {
+      LOGGER.debug(
+        `Repository call: findOne - params: ${JSON.stringify({
+          courseId,
+        })}`
+      );
       const fetchedCourse = await courseRepository.findOne(courseId);
 
       if (!fetchedCourse) {
+        LOGGER.warn(`Course not found`);
         return res.status(404).json({ error: "Course not found" });
       }
       await courseRepository.delete(courseId);
       return res.status(204).json(fetchedCourse);
-    } catch (error) {
+    } catch (error: any) {
+      LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
       return res.status(500).json({ error: "Unexpected DB error" });
     }
   };

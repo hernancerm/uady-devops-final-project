@@ -3,13 +3,19 @@ import { Student } from "../entities/Student";
 import { Request, Response } from "express";
 import { validate } from "class-validator";
 import { TController } from "./types";
+import { createLogger } from "../loggers/logger";
+import { json } from "stream/consumers";
+
+const LOGGER = createLogger(__filename);
 
 export const StudentController: TController<Student> = (studentRepository) => {
   const getAll = async (req: Request, res: Response) => {
     try {
+      LOGGER.debug("Repository call: find - params: {}");
       const fetchedStudents = await studentRepository.find();
       return res.status(200).json(fetchedStudents);
-    } catch (error) {
+    } catch (error: any) {
+      LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
       return res.status(500).json({ error: "Unexpected DB error" });
     }
   };
@@ -18,13 +24,18 @@ export const StudentController: TController<Student> = (studentRepository) => {
     const studentId = req.params.studentId;
 
     try {
+      LOGGER.debug(
+        `Repository call: findOne - params: ${JSON.stringify({ studentId })}`
+      );
       const fetchedStudent = await studentRepository.findOne(studentId);
 
       if (!fetchedStudent) {
+        LOGGER.warn(`Student not found`);
         return res.status(404).json({ error: "Student not found" });
       }
       return res.status(200).json(fetchedStudent);
-    } catch (error) {
+    } catch (error: any) {
+      LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
       return res.status(500).json({ error: "Unexpected DB error" });
     }
   };
@@ -35,6 +46,7 @@ export const StudentController: TController<Student> = (studentRepository) => {
     const errors = await validate(providedStudent);
 
     if (errors.length > 0) {
+      LOGGER.warn(`${errors.join().trimEnd()}`);
       return res.status(400).json({ error: "Invalid student", errors });
     }
 
@@ -42,9 +54,15 @@ export const StudentController: TController<Student> = (studentRepository) => {
       const { enrollmentId: savedStudentId } = await studentRepository.save(
         providedStudent
       );
+      LOGGER.debug(
+        `Repository call: findOne - params: ${JSON.stringify({
+          savedStudentId,
+        })}`
+      );
       const savedStudent = await studentRepository.findOne(savedStudentId);
       return res.status(201).json(savedStudent);
-    } catch (error) {
+    } catch (error: any) {
+      LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
       return res.status(500).json({ error: "Unexpected DB error" });
     }
   };
@@ -54,6 +72,11 @@ export const StudentController: TController<Student> = (studentRepository) => {
     const providedStudent = req.body;
 
     try {
+      LOGGER.debug(
+        `Repository call: findOne - params: ${JSON.stringify({
+          studentId,
+        })}`
+      );
       const fetchedStudent = await studentRepository.findOne(studentId);
 
       if (!fetchedStudent) {
@@ -65,15 +88,22 @@ export const StudentController: TController<Student> = (studentRepository) => {
       const errors = await validate(fetchedStudent);
 
       if (errors.length > 0) {
+        LOGGER.warn(`${errors.join().trimEnd()}`);
         return res.status(400).json({ error: "Invalid student", errors });
       }
 
       const { enrollmentId: savedStudentId } = await studentRepository.save(
         fetchedStudent
       );
+      LOGGER.debug(
+        `Repository call: findOne - params: ${JSON.stringify({
+          savedStudentId,
+        })}`
+      );
       const savedStudent = await studentRepository.findOne(savedStudentId);
       return res.status(200).json(savedStudent);
-    } catch (error) {
+    } catch (error: any) {
+      LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
       return res.status(500).json({ error: "Unexpected DB error" });
     }
   };
@@ -85,11 +115,18 @@ export const StudentController: TController<Student> = (studentRepository) => {
       const fetchedStudent = await studentRepository.findOne(studentId);
 
       if (!fetchedStudent) {
+        LOGGER.warn(`Student not found`);
         return res.status(404).json({ error: "Student not found" });
       }
+      LOGGER.debug(
+        `Repository call: delete - params: ${JSON.stringify({
+          studentId,
+        })}`
+      );
       await studentRepository.delete(studentId);
       return res.status(204).json(fetchedStudent);
-    } catch (error) {
+    } catch (error: any) {
+      LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
       return res.status(500).json({ error: "Unexpected DB error" });
     }
   };
