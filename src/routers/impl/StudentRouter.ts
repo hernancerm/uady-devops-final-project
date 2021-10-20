@@ -4,6 +4,7 @@ import { RouterAssembler } from "../RouterAssembler";
 
 import { Router } from "express";
 import { getCustomRepository } from "typeorm";
+import LoggingMiddleware from "../../middlewares/LoggingMiddleware";
 
 export const StudentRouter = (): RouterAssembler => {
   const studentController = StudentController(
@@ -15,13 +16,13 @@ export const StudentRouter = (): RouterAssembler => {
 
   router
     .route(BASE_PATH)
-    .get(studentController.getAll)
-    .post(studentController.create);
+    .get(LoggingMiddleware, studentController.getAll)
+    .post(LoggingMiddleware, studentController.create);
   router
     .route(`${BASE_PATH}/:studentId`)
-    .get(studentController.getById)
-    .put(studentController.update)
-    .delete(studentController.deleteById);
+    .get(LoggingMiddleware, LoggingMiddleware, studentController.getById)
+    .put(LoggingMiddleware, studentController.update)
+    .delete(LoggingMiddleware, studentController.deleteById);
 
   return { getAssembledRouter: () => router };
 };
