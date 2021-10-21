@@ -1,15 +1,16 @@
 import { Student } from "../entities/Student";
+import { TController } from "./types";
+import { createLogger } from "../loggers/logger";
 
 import { Request, Response } from "express";
 import { validate } from "class-validator";
-import { TController } from "./types";
-import { createLogger } from "../loggers/logger";
-import { json } from "stream/consumers";
 
 const LOGGER = createLogger(__filename);
 
 export const StudentController: TController<Student> = (studentRepository) => {
   const getAll = async (req: Request, res: Response) => {
+    LOGGER.debug("Function call: getAll");
+
     try {
       LOGGER.debug("Repository call: find - params: {}");
       const fetchedStudents = await studentRepository.find();
@@ -21,6 +22,8 @@ export const StudentController: TController<Student> = (studentRepository) => {
   };
 
   const getById = async (req: Request, res: Response) => {
+    LOGGER.debug("Function call: getById");
+
     const studentId = req.params.studentId;
 
     try {
@@ -41,6 +44,8 @@ export const StudentController: TController<Student> = (studentRepository) => {
   };
 
   const create = async (req: Request, res: Response) => {
+    LOGGER.debug("Function call: create");
+
     const providedStudent = Object.assign(new Student(), req.body);
 
     const errors = await validate(providedStudent);
@@ -68,6 +73,8 @@ export const StudentController: TController<Student> = (studentRepository) => {
   };
 
   const update = async (req: Request, res: Response) => {
+    LOGGER.debug("Function call: update");
+
     const studentId = req.params.studentId;
     const providedStudent = req.body;
 
@@ -109,6 +116,8 @@ export const StudentController: TController<Student> = (studentRepository) => {
   };
 
   const deleteById = async (req: Request, res: Response) => {
+    LOGGER.debug("Function call: deleteById");
+
     const studentId = req.params.studentId;
 
     try {

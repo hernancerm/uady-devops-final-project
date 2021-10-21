@@ -1,10 +1,10 @@
 import { StudentController } from "../../controllers/StudentController";
 import { StudentRepository } from "../../repositories/StudentRepository";
 import { RouterAssembler } from "../RouterAssembler";
+import LoggingMiddleware from "../../middlewares/LoggingMiddleware";
 
 import { Router } from "express";
 import { getCustomRepository } from "typeorm";
-import LoggingMiddleware from "../../middlewares/LoggingMiddleware";
 
 export const StudentRouter = (): RouterAssembler => {
   const studentController = StudentController(
@@ -20,7 +20,7 @@ export const StudentRouter = (): RouterAssembler => {
     .post(LoggingMiddleware, studentController.create);
   router
     .route(`${BASE_PATH}/:studentId`)
-    .get(LoggingMiddleware, LoggingMiddleware, studentController.getById)
+    .get(LoggingMiddleware, studentController.getById)
     .put(LoggingMiddleware, studentController.update)
     .delete(LoggingMiddleware, studentController.deleteById);
 

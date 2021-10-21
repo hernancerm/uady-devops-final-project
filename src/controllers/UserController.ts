@@ -1,21 +1,25 @@
 import { User } from "../entities/User";
-import bcrypt from "bcrypt";
+import { createLogger } from "../loggers/logger";
+import { AuthHelper } from "../middlewares/AuthMiddleware";
 
 import { Request, Response } from "express";
 import { Repository } from "typeorm";
-import { AuthHelper } from "../middlewares/AuthMiddleware";
-import { createLogger } from "../loggers/logger";
+import bcrypt from "bcrypt";
 
 const LOGGER = createLogger(__filename);
 
 export const UserController = (userRepository: Repository<User>) => {
   const getAll = async (req: Request, res: Response): Promise<Response> => {
+    LOGGER.debug("Function call: getAll");
+
     LOGGER.debug(`Repository call: find - params: {}`);
     const users = await userRepository.find();
     return res.status(200).json(users);
   };
 
   const signUp = async (req: Request, res: Response): Promise<Response> => {
+    LOGGER.debug("Function call: signUp");
+
     const providedUser = Object.assign(new User(), req.body);
 
     LOGGER.debug(
@@ -43,6 +47,8 @@ export const UserController = (userRepository: Repository<User>) => {
   };
 
   const getToken = async (req: Request, res: Response): Promise<Response> => {
+    LOGGER.debug("Function call: getToken");
+
     const providedUser = Object.assign(new User(), req.body);
     LOGGER.debug(
       `Repository call: findOne - params: ${JSON.stringify({

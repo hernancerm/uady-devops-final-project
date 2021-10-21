@@ -1,13 +1,12 @@
-import { NextFunction, Request, Response } from "express";
 import { createLogger } from "../loggers/logger";
+
+import { Request, Response } from "express";
 
 const LOGGER = createLogger(__filename);
 
 const LoggingMiddleware = (req: Request, res: Response, next: any) => {
-  // LOGGING API CALL
-
   LOGGER.info(
-    `API CALL: ${req.originalUrl} - params: ${JSON.stringify(
+    `Http request: ${req.method} ${req.originalUrl} - params: ${JSON.stringify(
       req.params
     )} - headers: ${JSON.stringify({
       ...req.headers,
@@ -16,10 +15,10 @@ const LoggingMiddleware = (req: Request, res: Response, next: any) => {
   );
 
   LOGGER.debug(
-    `API CALL: ${req.originalUrl} - body ${JSON.stringify({
+    `Http request: ${req.method} ${req.originalUrl} - body ${JSON.stringify({
       ...req.body,
       password: undefined,
-    })}}`
+    })}`
   );
 
   next();

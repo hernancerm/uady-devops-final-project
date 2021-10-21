@@ -9,6 +9,8 @@ const LOGGER = createLogger(__filename);
 
 export const CourseController: TController<Course> = (courseRepository) => {
   const getAll = async (req: Request, res: Response) => {
+    LOGGER.debug("Function call: getAll");
+
     try {
       LOGGER.debug(
         `Repository call: find - params: ${JSON.stringify({
@@ -28,6 +30,8 @@ export const CourseController: TController<Course> = (courseRepository) => {
   };
 
   const getById = async (req: Request, res: Response) => {
+    LOGGER.debug("Function call: getById");
+
     const courseId = req.params.courseId;
 
     try {
@@ -47,6 +51,8 @@ export const CourseController: TController<Course> = (courseRepository) => {
   };
 
   const create = async (req: Request, res: Response) => {
+    LOGGER.debug("Function call: create");
+
     const providedCourse = Object.assign(new Course(), req.body);
 
     const errors = await validate(providedCourse);
@@ -72,6 +78,8 @@ export const CourseController: TController<Course> = (courseRepository) => {
   };
 
   const update = async (req: Request, res: Response) => {
+    LOGGER.debug("Function call: update");
+
     const courseId = req.params.courseId;
     const providedCourse = req.body;
 
@@ -111,6 +119,8 @@ export const CourseController: TController<Course> = (courseRepository) => {
   };
 
   const deleteById = async (req: Request, res: Response) => {
+    LOGGER.debug("Function call: deleteById");
+
     const courseId = req.params.courseId;
 
     try {
