@@ -22,15 +22,7 @@ export const UserController = (userRepository: Repository<User>) => {
 
     const providedUser = Object.assign(new User(), req.body);
 
-    LOGGER.debug(
-      `Method ${bcrypt.genSalt.name} called  - params: {rounds: 10}}`
-    );
-
     const salt = await bcrypt.genSalt(10);
-
-    LOGGER.debug(
-      `Method ${bcrypt.hash.name} called  - params: {password, salt}}`
-    );
 
     const hashedPassword = await bcrypt.hash(providedUser.password, salt);
 
