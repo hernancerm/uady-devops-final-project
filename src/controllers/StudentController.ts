@@ -12,8 +12,9 @@ export const StudentController: TController<Student> = (studentRepository) => {
     LOGGER.debug("Function call: getAll");
 
     try {
-      LOGGER.debug("Repository call: find - params: {}");
+      LOGGER.debug("Repository call: find - no params");
       const fetchedStudents = await studentRepository.find();
+
       return res.status(200).json(fetchedStudents);
     } catch (error: any) {
       LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
@@ -27,15 +28,14 @@ export const StudentController: TController<Student> = (studentRepository) => {
     const studentId = req.params.studentId;
 
     try {
-      LOGGER.debug(
-        `Repository call: findOne - params: ${JSON.stringify({ studentId })}`
-      );
+      LOGGER.debug(`Repository call: findOne - params: ${studentId}`);
       const fetchedStudent = await studentRepository.findOne(studentId);
 
       if (!fetchedStudent) {
-        LOGGER.warn(`Student not found`);
+        LOGGER.warn("Student not found");
         return res.status(404).json({ error: "Student not found" });
       }
+
       return res.status(200).json(fetchedStudent);
     } catch (error: any) {
       LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
@@ -56,15 +56,16 @@ export const StudentController: TController<Student> = (studentRepository) => {
     }
 
     try {
+      LOGGER.debug(
+        `Repository call: save - params: ${JSON.stringify(providedStudent)}`
+      );
       const { enrollmentId: savedStudentId } = await studentRepository.save(
         providedStudent
       );
-      LOGGER.debug(
-        `Repository call: findOne - params: ${JSON.stringify({
-          savedStudentId,
-        })}`
-      );
+
+      LOGGER.debug(`Repository call: findOne - params: ${savedStudentId}`);
       const savedStudent = await studentRepository.findOne(savedStudentId);
+
       return res.status(201).json(savedStudent);
     } catch (error: any) {
       LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
@@ -79,14 +80,11 @@ export const StudentController: TController<Student> = (studentRepository) => {
     const providedStudent = req.body;
 
     try {
-      LOGGER.debug(
-        `Repository call: findOne - params: ${JSON.stringify({
-          studentId,
-        })}`
-      );
+      LOGGER.debug(`Repository call: findOne - params: ${studentId}`);
       const fetchedStudent = await studentRepository.findOne(studentId);
 
       if (!fetchedStudent) {
+        LOGGER.warn("Student not found");
         return res.status(404).json({ error: "Student not found" });
       }
 
@@ -99,15 +97,16 @@ export const StudentController: TController<Student> = (studentRepository) => {
         return res.status(400).json({ error: "Invalid student", errors });
       }
 
+      LOGGER.debug(
+        `Repository call: save - params: ${JSON.stringify(fetchedStudent)}`
+      );
       const { enrollmentId: savedStudentId } = await studentRepository.save(
         fetchedStudent
       );
-      LOGGER.debug(
-        `Repository call: findOne - params: ${JSON.stringify({
-          savedStudentId,
-        })}`
-      );
+
+      LOGGER.debug(`Repository call: findOne - params: ${savedStudentId}`);
       const savedStudent = await studentRepository.findOne(savedStudentId);
+
       return res.status(200).json(savedStudent);
     } catch (error: any) {
       LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
@@ -121,18 +120,17 @@ export const StudentController: TController<Student> = (studentRepository) => {
     const studentId = req.params.studentId;
 
     try {
+      LOGGER.debug(`Repository call: findOne - params: ${studentId}`);
       const fetchedStudent = await studentRepository.findOne(studentId);
 
       if (!fetchedStudent) {
-        LOGGER.warn(`Student not found`);
+        LOGGER.warn("Student not found");
         return res.status(404).json({ error: "Student not found" });
       }
-      LOGGER.debug(
-        `Repository call: delete - params: ${JSON.stringify({
-          studentId,
-        })}`
-      );
+
+      LOGGER.debug(`Repository call: delete - params: ${studentId}`);
       await studentRepository.delete(studentId);
+
       return res.status(204).json(fetchedStudent);
     } catch (error: any) {
       LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);

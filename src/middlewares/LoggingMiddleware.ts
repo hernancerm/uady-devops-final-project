@@ -13,7 +13,7 @@ const obfuscate = (sensitiveObject: object): object => {
   return Object.assign(output, sensitiveAttributes);
 };
 
-const LoggingMiddleware = (req: Request, res: Response, next: any) => {
+export const LoggingMiddleware = (req: Request, res: Response, next: any) => {
   LOGGER.info(
     `Http request: ${req.method} ${req.originalUrl} - params: ${JSON.stringify(
       req.params
@@ -21,12 +21,10 @@ const LoggingMiddleware = (req: Request, res: Response, next: any) => {
   );
 
   LOGGER.debug(
-    `Http request: ${req.method} ${req.originalUrl} - body ${JSON.stringify(
+    `Http request: ${req.method} ${req.originalUrl} - body: ${JSON.stringify(
       obfuscate(req.body)
     )}`
   );
 
   next();
 };
-
-export default LoggingMiddleware;

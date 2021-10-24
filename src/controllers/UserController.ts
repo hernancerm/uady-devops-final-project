@@ -1,6 +1,6 @@
 import { User } from "../entities/User";
 import { createLogger } from "../loggers/logger";
-import { AuthHelper } from "../middlewares/AuthMiddleware";
+import { AuthHelper } from "../middlewares/AuthJwtMiddleware";
 
 import { Request, Response } from "express";
 import { Repository } from "typeorm";
@@ -12,8 +12,9 @@ export const UserController = (userRepository: Repository<User>) => {
   const getAll = async (req: Request, res: Response): Promise<Response> => {
     LOGGER.debug("Function call: getAll");
 
-    LOGGER.debug(`Repository call: find - params: {}`);
+    LOGGER.debug(`Repository call: find - no params`);
     const users = await userRepository.find();
+
     return res.status(200).json(users);
   };
 
@@ -27,10 +28,18 @@ export const UserController = (userRepository: Repository<User>) => {
     const hashedPassword = await bcrypt.hash(providedUser.password, salt);
 
     try {
-      const { id } = await userRepository.save({
+      const userWithHashedPassword = {
         username: providedUser.username,
         password: hashedPassword,
-      });
+      };
+
+      LOGGER.debug(
+        `Repository call: save - params: ${JSON.stringify(
+          userWithHashedPassword
+        )}`
+      );
+      const { id } = await userRepository.save(userWithHashedPassword);
+
       return res.status(201).json({ userId: id });
     } catch (error: any) {
       LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
@@ -42,38 +51,45 @@ export const UserController = (userRepository: Repository<User>) => {
     LOGGER.debug("Function call: getToken");
 
     const providedUser = Object.assign(new User(), req.body);
-    LOGGER.debug(
-      `Repository call: findOne - params: ${JSON.stringify({
+
+    try {
+      const findOneQuery = {
         where: { username: providedUser.username },
-      })}`
-    );
-    const user = await userRepository.findOne({
-      where: { username: providedUser.username },
-    });
-    if (!user) {
-      LOGGER.warn(`Invalid username or password`);
-      return res.status(401).json({ error: "Invalid username or password" });
-    }
-    return await new Promise<Response>(function (resolve) {
-      bcrypt.compare(
-        providedUser.password,
-        user.password,
-        function (err, reslt) {
-          if (err || !reslt) {
-            LOGGER.warn(`Invalid username or password`);
-            resolve(
-              res.status(401).json({ error: "Invalid username or password" })
-            );
-          } else {
-            resolve(
-              res
-                .status(200)
-                .json({ token: AuthHelper().getToken(user.username) })
-            );
-          }
-        }
+      };
+
+      LOGGER.debug(
+        `Repository call: findOne - params: ${JSON.stringify(findOneQuery)}`
       );
-    });
+      const user = await userRepository.findOne(findOneQuery);
+      if (!user) {
+        LOGGER.warn("Invalid username or password");
+        return res.status(401).json({ error: "Invalid username or password" });
+      }
+
+      return await new Promise<Response>(function (resolve) {
+        bcrypt.compare(
+          providedUser.password,
+          user.password,
+          function (err, result) {
+            if (err || !result) {
+              LOGGER.warn("Invalid username or password");
+              resolve(
+                res.status(401).json({ error: "Invalid username or password" })
+              );
+            } else {
+              resolve(
+                res
+                  .status(200)
+                  .json({ token: AuthHelper().getToken(user.username) })
+              );
+            }
+          }
+        );
+      });
+    } catch (error: any) {
+      LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
+      return res.status(500).json({ error: "Unexpected DB error" });
+    }
   };
 
   return { getAll, signUp, getToken };
