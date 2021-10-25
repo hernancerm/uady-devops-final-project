@@ -1,5 +1,11 @@
+
+@Field 
 def last_build_name
+
+@Field 
 def git_branch_name
+
+@Field 
 def build_name
 
 def get_last_successful_build_name() {
