@@ -1,6 +1,26 @@
 pipeline {
     agent any
     stages {
+        stage('Setup parameters') {
+            steps {
+                script { 
+                    properties([
+                        parameters([
+                            string(
+                                defaultValue: '', 
+                                name: 'BUILD_NAME', 
+                                trim: true
+                            ),
+                            string(
+                                defaultValue: '', 
+                                name: 'LAST_BUILD_NAME', 
+                                trim: true
+                            )
+                        ])
+                    ])
+                }
+            }
+        }
         stage('deploy') {
             steps {
                 echo params.BUILD_NAME
