@@ -49,7 +49,7 @@ pipeline {
 
         stage('build') {
             steps {
-                bat "docker build -t ${build_name}"
+                bat "docker build -t ${build_name} ."
             }
         }
 
