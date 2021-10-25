@@ -10,7 +10,7 @@ def get_build_id() {
   return lastBuildId
 }
 
-def sourceControlVars
+def git_branch_name
 
 pipeline {
     agent any
@@ -19,8 +19,8 @@ pipeline {
             steps {
                 echo "checking out project"
                 git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/HerCerM/uady-devops-final-project.git'
-                echo "${GIT_BRANCH}"
-                echo "project checked out"
+                git_branch_name = "${GIT_BRANCH}"
+                echo "${GIT_BRANCH} checked out"
             }
         }
 
@@ -28,7 +28,7 @@ pipeline {
     post {
         success {
             echo "Build success"
-
+            echo git_branch_name
             //call other job
         }
     }
