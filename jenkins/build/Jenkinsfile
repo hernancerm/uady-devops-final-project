@@ -1,0 +1,32 @@
+def get_last_successful_build() {
+  def buildJobName = Jenkins.instance.getItemByFullName('Jobs/uadybuild')
+  def lastBuildId = buildJobName.getLastSuccessfulBuild()
+  return lastBuildId
+}
+
+def get_build_id() {
+  def buildJobName = Jenkins.instance.getItemByFullName('Jobs/uadybuild')
+  def lastBuildId = buildJobName.getLastSuccessfulBuild()
+  return lastBuildId
+}
+
+def sourceControlVars
+
+pipeline {
+    stages {
+        stage('checkout') {
+            steps {
+                echo "checking out project"
+                git branch: 'main', credentialsId: 'github1', url: 'ssh://git@https://github.com/HerCerM/uady-devops-final-project.git'
+                echo "${GIT_BRANCH}"
+                echo "project checked out"
+            }
+        }
+
+    }
+    post {
+        success {
+            //call other job
+        }
+    }
+}
