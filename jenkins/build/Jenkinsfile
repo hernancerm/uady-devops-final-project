@@ -1,16 +1,18 @@
-def get_last_successful_build() {
+def get_last_successful_build_name() {
   def buildJobName = Jenkins.instance.getItemByFullName('Jobs/uadybuild')
   def lastBuildId = buildJobName.getLastSuccessfulBuild()
+  image_name = "node_uady_sicei:" + git_branch_name + "-" + lastBuildId
   return lastBuildId
 }
 
-def get_build_id() {
-  def buildJobName = Jenkins.instance.getItemByFullName('Jobs/uadybuild')
-  def lastBuildId = buildJobName.getLastSuccessfulBuild()
-  return lastBuildId
+def get_build_name() {
+  image_name = "node_uady_sicei:" + git_branch_name + "-" + env.BUILD_NUMBER
+  return image_name
 }
 
+def last_build_name
 def git_branch_name
+def build_name
 
 pipeline {
     agent any
@@ -22,8 +24,24 @@ pipeline {
                 
                 script {
                     git_branch_name = "${GIT_BRANCH}"
+                    last_build_name = getLastSuccessfulBuild()
+                    build_name = get_build_name()
                 }
                 echo "${GIT_BRANCH} checked out"
+            }
+        }
+
+        stage('test') {
+            steps {
+                bat "npm install"
+                bat "npm run build_win"
+                bat "npm run test"
+            }
+        }
+
+        stage('build') {
+            steps {
+                bat "docker build -t ${build_name}"
             }
         }
 
@@ -32,7 +50,7 @@ pipeline {
         success {
             echo "Build success"
             echo git_branch_name
-            //call other job
+            build job:'uadydeploy' , parameters:[string(name: 'BUILD_NAME', value: build_name),string(name: 'LAST_BUILD_NAME', value: last_build_name)]
         }
     }
 }
