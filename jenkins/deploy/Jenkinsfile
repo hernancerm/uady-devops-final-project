@@ -5,7 +5,7 @@ pipeline {
             steps {
                 bat "docker rm -f node_uady_sicei"
                 bat "docker container run -d -e DB_HOST=host.docker.internal -e DB_PORT=3306 -e DB_USERNAME=root -e DB_PASSWORD=pa$$word1 -e DB_NAME=uady_sicei -p 8081:8080 --name node_uady_sicei ${params.BUILD_NAME}"
-                bat "docker rm -f ${params.LAST_BUILD_NAME}"
+                bat "docker rm -f ${params.LAST_BUILD_NAME} || echo 'removing old image failed but shouldn't stop'"
             }
         }
     }
