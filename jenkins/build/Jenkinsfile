@@ -1,3 +1,4 @@
+import groovy.transform.Field
 
 @Field 
 def last_build_name
