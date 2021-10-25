@@ -19,7 +19,10 @@ pipeline {
             steps {
                 echo "checking out project"
                 git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/HerCerM/uady-devops-final-project.git'
-                git_branch_name = "${GIT_BRANCH}"
+                
+                script {
+                    git_branch_name = "${GIT_BRANCH}"
+                }
                 echo "${GIT_BRANCH} checked out"
             }
         }
