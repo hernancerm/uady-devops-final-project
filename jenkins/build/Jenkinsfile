@@ -1,5 +1,5 @@
 def get_last_successful_build_name() {
-  last_build_number = Jenkins.instance.getItemByFullName('Jobs/uadybuild').getLastSuccessfulBuild()
+  last_build_number = Jenkins.instance.getItemByFullName('uadybuild').getLastSuccessfulBuild()
   image_name = "node_uady_sicei:" + git_branch_name + "-" + last_build_number
   return lastBuildId
 }
