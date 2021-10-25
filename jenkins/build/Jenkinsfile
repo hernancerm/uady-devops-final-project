@@ -24,7 +24,7 @@ pipeline {
                 
                 script {
                     git_branch_name = "${GIT_BRANCH}"
-                    last_build_name = getLastSuccessfulBuild()
+                    last_build_name = get_last_successful_build_name()
                     build_name = get_build_name()
                 }
                 echo "${GIT_BRANCH} checked out"
