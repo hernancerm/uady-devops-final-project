@@ -50,7 +50,7 @@ test("getAll - 200", async () => {
   // verify - mocks
   expect(mockCourseRepository.find).toHaveBeenCalledTimes(1);
 
-  expect(mockRes.status).toHaveBeenCalledWith(201);
+  expect(mockRes.status).toHaveBeenCalledWith(200);
   expect(mockRes.json).toHaveBeenCalledWith(courses);
 });
 
