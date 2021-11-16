@@ -6,6 +6,7 @@
     "scripts": {
         "test": "jest ./dist/__tests__",
         "build": "rimraf ./dist && tsc",
+        "build_win": "(IF EXIST .\\dist rmdir /S /Q .\\dist) && tsc",
         "start": "node ./dist/server.js",
         "dev": "DEBUG=express:* && ts-node ./src/server.ts"
     },
