@@ -1,6 +1,6 @@
 import { User } from "../entities/User";
 import { createLogger } from "../loggers/logger";
-import { AuthHelper } from "../middlewares/AuthJwtMiddleware";
+import { AuthHelper } from "../middlewares/AuthMiddleware";
 
 import { Request, Response } from "express";
 import { Repository } from "typeorm";
@@ -60,18 +60,18 @@ export const UserController = (userRepository: Repository<User>) => {
       LOGGER.debug(
         `Repository call: findOne - params: ${JSON.stringify(findOneQuery)}`
       );
+
       const user = await userRepository.findOne(findOneQuery);
       if (!user) {
         LOGGER.warn("Invalid username or password");
         return res.status(401).json({ error: "Invalid username or password" });
       }
-
       return await new Promise<Response>(function (resolve) {
         bcrypt.compare(
           providedUser.password,
           user.password,
-          function (err, result) {
-            if (err || !result) {
+          function (err, reslt) {
+            if (err || !reslt) {
               LOGGER.warn("Invalid username or password");
               resolve(
                 res.status(401).json({ error: "Invalid username or password" })

@@ -12,15 +12,9 @@ export const CourseController: TController<Course> = (courseRepository) => {
     LOGGER.debug("Function call: getAll");
 
     try {
-      const findQuery = {
-        relations: ["students"],
-      };
-
-      LOGGER.debug(
-        `Repository call: find - params: ${JSON.stringify(findQuery)}`
-      );
-      const fetchedCourses = await courseRepository.find(findQuery);
-
+      LOGGER.debug("Repository call: find - no params");
+      const fetchedCourses = await courseRepository.find();
+      console.log(fetchedCourses);
       return res.status(200).json(fetchedCourses);
     } catch (error: any) {
       LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);

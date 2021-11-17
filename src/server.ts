@@ -2,12 +2,13 @@ import { StudentRouter } from "./routers/impl/StudentRouter";
 import { UserRouter } from "./routers/impl/UserRouter";
 import { AuthRouter } from "./routers/impl/AuthRouter";
 import { CourseRouter } from "./routers/impl/CourseRouter";
-import { AuthJwtMiddleware } from "./middlewares/AuthJwtMiddleware";
+import { AuthMiddleware } from "./middlewares/AuthMiddleware";
 import { LoggingMiddleware } from "./middlewares/LoggingMiddleware";
 import { createLogger } from "./loggers/logger";
 
 import "reflect-metadata";
 import express from "express";
+import cors from "cors";
 import { createConnection } from "typeorm";
 
 const LOGGER = createLogger(__filename);
@@ -17,13 +18,14 @@ const HOST = "0.0.0.0";
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 createConnection().then(() => {
   // Middlewares
   app.use("/api/auth", LoggingMiddleware);
   // Within the non-capturing group (?:auth) add any other non-protected routes.
   // For instance, (?:auth) -> (?:auth|foo) to NOT protect /api/auth/** AND /api/foo/**.
-  app.use(/\/api(?!\/(?:auth))/, LoggingMiddleware, AuthJwtMiddleware);
+  app.use(/\/api(?!\/(?:auth))/, LoggingMiddleware, AuthMiddleware);
 
   // Routers
   app.use("/api/auth", AuthRouter().getAssembledRouter());

@@ -12,9 +12,12 @@ export const StudentController: TController<Student> = (studentRepository) => {
     LOGGER.debug("Function call: getAll");
 
     try {
-      LOGGER.debug("Repository call: find - no params");
-      const fetchedStudents = await studentRepository.find();
+      const findQuery = {
+        relations: ["course"],
+      };
 
+      LOGGER.debug(`Repository call: find - ${findQuery}`);
+      const fetchedStudents = await studentRepository.find(findQuery);
       return res.status(200).json(fetchedStudents);
     } catch (error: any) {
       LOGGER.error(`Message: ${error.message} - Stack trace: ${error.stack}`);
@@ -28,8 +31,17 @@ export const StudentController: TController<Student> = (studentRepository) => {
     const studentId = req.params.studentId;
 
     try {
-      LOGGER.debug(`Repository call: findOne - params: ${studentId}`);
-      const fetchedStudent = await studentRepository.findOne(studentId);
+      const findQuery = {
+        relations: ["course"],
+      };
+
+      LOGGER.debug(
+        `Repository call: findOne - params: ${studentId}, ${findQuery}`
+      );
+      const fetchedStudent = await studentRepository.findOne(
+        studentId,
+        findQuery
+      );
 
       if (!fetchedStudent) {
         LOGGER.warn("Student not found");
