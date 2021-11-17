@@ -10,15 +10,11 @@ export const CourseRouter = (): RouterAssembler => {
     getCustomRepository(CourseRepository)
   );
 
-  const BASE_PATH = "/courses";
-
   const router = Router();
+
+  router.route("/").get(courseController.getAll).post(courseController.create);
   router
-    .route(BASE_PATH)
-    .get(courseController.getAll)
-    .post(courseController.create);
-  router
-    .route(`${BASE_PATH}/:courseId`)
+    .route("/:courseId")
     .get(courseController.getById)
     .put(courseController.update)
     .delete(courseController.deleteById);

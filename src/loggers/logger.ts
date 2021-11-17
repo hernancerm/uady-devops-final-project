@@ -20,7 +20,6 @@ export const createLogger: TLoggerCreator = (filename: string) => {
     transports: [
       new winston.transports.File({
         filename: "logs/combined.log",
-        level: "debug",
         maxsize: 100 * 1000_000 /* 100Mb */,
         maxFiles: 1,
         tailable: true,

@@ -79,7 +79,9 @@ test("getById - 200", async () => {
   await studentController.getById(mockReq, mockRes);
 
   // verify - mocks
-  expect(mockStudentRepository.findOne).toHaveBeenCalledWith("1");
+  expect(mockStudentRepository.findOne).toHaveBeenCalledWith("1", {
+    relations: ["course"],
+  });
 
   expect(mockRes.status).toHaveBeenCalledWith(200);
   expect(mockRes.json).toHaveBeenCalledWith(student);

@@ -7,7 +7,10 @@ import { getCustomRepository } from "typeorm";
 
 export const UserRouter = (): RouterAssembler => {
   const userController = UserController(getCustomRepository(UserRepository));
+
   const router = Router();
-  router.route("/users").get( userController.getAll);
+
+  router.route("/").get(userController.getAll);
+
   return { getAssembledRouter: () => router };
 };
