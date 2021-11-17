@@ -7,7 +7,9 @@ import { TController } from "./types";
 export const StudentController: TController<Student> = (studentRepository) => {
   const getAll = async (req: Request, res: Response) => {
     try {
-      const fetchedStudents = await studentRepository.find();
+      const fetchedStudents = await studentRepository.find({
+        relations: ["course"],
+      });
       return res.status(200).json(fetchedStudents);
     } catch (error) {
       return res.status(500).json({ error: "Unexpected DB error" });
@@ -18,7 +20,9 @@ export const StudentController: TController<Student> = (studentRepository) => {
     const studentId = req.params.studentId;
 
     try {
-      const fetchedStudent = await studentRepository.findOne(studentId);
+      const fetchedStudent = await studentRepository.findOne(studentId, {
+        relations: ["course"],
+      });
 
       if (!fetchedStudent) {
         return res.status(404).json({ error: "Student not found" });
