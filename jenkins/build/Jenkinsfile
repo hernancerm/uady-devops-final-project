@@ -10,7 +10,11 @@ def git_branch_name
 def build_name
 
 def get_last_successful_build_name() {
-  last_build_number = Jenkins.instance.getItemByFullName('uadybuild').getItem('main').getLastSuccessfulBuild().number
+  last_successful_build = Jenkins.instance.getItemByFullName('uadybuild').getItem('main').getLastSuccessfulBuild()
+  if (last_successful_build == null) {
+      return '';
+  }
+  last_build_number = last_successful_build.number
   image_name = "node_uady_sicei:" + git_branch_name + "-" + last_build_number
   return image_name
 }
