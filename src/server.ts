@@ -9,6 +9,7 @@ import "reflect-metadata";
 import express from "express";
 import cors from "cors";
 import { createConnection } from "typeorm";
+import { TestRouter } from './routers/impl/TestRouter'
 
 const LOGGER = createLogger(__filename);
 
@@ -26,6 +27,7 @@ createConnection().then(() => {
   app.use("/api", authenticateJWT, StudentRouter().getAssembledRouter());
   app.use("/api", authenticateJWT, UserRouter().getAssembledRouter());
   app.use("/api", authenticateJWT, CourseRouter().getAssembledRouter());
+  app.use("/api", TestRouter().getAssembledRouter())
 });
 
 app.listen(PORT, HOST);
