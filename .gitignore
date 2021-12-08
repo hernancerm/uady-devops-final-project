@@ -10,4 +10,4 @@
 !.env.example
 
 # Logs
-/logs
+/logs/*.log
