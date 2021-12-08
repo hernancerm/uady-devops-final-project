@@ -58,7 +58,6 @@ pipeline {
         success {
             echo "Build success " +git_branch_name
             build job:'uadydeploy/'+git_branch_name , parameters:[string(name: 'BUILD_NAME', value: build_name),string(name: 'LAST_BUILD_NAME', value: last_build_name)]
-            build job:'frontbuild/'+git_branch_name
         }
     }
 }
