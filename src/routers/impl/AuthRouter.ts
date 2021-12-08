@@ -7,8 +7,11 @@ import { getCustomRepository } from "typeorm";
 
 export const AuthRouter = (): RouterAssembler => {
   const userController = UserController(getCustomRepository(UserRepository));
+
   const router = Router();
-  router.route("/auth/signup").post(userController.signUp);
-  router.route("/auth/login").post(userController.getToken);
+
+  router.route("/signup").post(userController.signUp);
+  router.route("/login").post(userController.getToken);
+
   return { getAssembledRouter: () => router };
 };

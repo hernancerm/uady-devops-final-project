@@ -3,12 +3,11 @@ import { RouterAssembler } from "../RouterAssembler";
 
 import { Router } from "express";
 
-export const TestRouter = (): RouterAssembler => {
-  const BASE_PATH = "/health";
+export const TestRouter = (): RouterAssembler => {  
 
   const router = Router();
   router
-    .route(BASE_PATH)
+    .route('/')
     .get(TestController().get)   
 
   return { getAssembledRouter: () => router };
