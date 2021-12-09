@@ -10,6 +10,7 @@ import "reflect-metadata";
 import express from "express";
 import cors from "cors";
 import { createConnection } from "typeorm";
+import { TestRouter } from './routers/impl/TestRouter'
 
 const LOGGER = createLogger(__filename);
 
@@ -32,6 +33,7 @@ createConnection().then(() => {
   app.use("/api/students", StudentRouter().getAssembledRouter());
   app.use("/api/users", UserRouter().getAssembledRouter());
   app.use("/api/courses", CourseRouter().getAssembledRouter());
+  app.use("/api/health", TestRouter().getAssembledRouter());
 });
 
 app.listen(PORT, HOST);
