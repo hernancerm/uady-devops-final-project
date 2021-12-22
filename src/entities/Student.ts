@@ -1,5 +1,13 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { IsIn, IsNotEmpty, IsString } from "class-validator";
+import { Course } from "./Course";
 
 @Entity()
 export class Student extends BaseEntity {
@@ -28,4 +36,10 @@ export class Student extends BaseEntity {
   @Column()
   @IsNotEmpty()
   enrollmentDate: Date;
+
+  @ManyToOne(() => Course, (course) => course.students)
+  @JoinColumn({
+    name: "course_id",
+  })
+  course: Course;
 }

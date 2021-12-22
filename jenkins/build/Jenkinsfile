@@ -1,0 +1,63 @@
+import groovy.transform.Field
+
+@Field 
+def last_build_name
+
+@Field 
+def git_branch_name
+
+@Field 
+def build_name
+
+def get_last_successful_build_name() {
+  last_build_number = Jenkins.instance.getItemByFullName('uadybuild').getItem('main').getLastSuccessfulBuild().number
+  image_name = "node_uady_sicei:" + git_branch_name + "-" + last_build_number
+  return image_name
+}
+
+def get_build_name() {
+  image_name = "node_uady_sicei:" + git_branch_name + "-" + env.BUILD_NUMBER
+  return image_name
+}
+
+
+
+pipeline {
+    agent any
+    stages {
+        stage('checkout') {
+            steps {
+                echo "checking out project"
+                git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/HerCerM/uady-devops-final-project.git'
+                
+                script {
+                    git_branch_name = "${GIT_BRANCH}"
+                    last_build_name = get_last_successful_build_name()
+                    build_name = get_build_name()
+                }
+                echo "${GIT_BRANCH} checked out"
+            }
+        }
+
+        stage('test') {
+            steps {
+                bat "npm install"
+                bat "npm run build_win"
+                bat "npm run test"
+            }
+        }
+
+        stage('build') {
+            steps {
+                bat "docker build -t ${build_name} ."
+            }
+        }
+
+    }
+    post {
+        success {
+            echo "Build success " +git_branch_name
+            build job:'uadydeploy/'+git_branch_name , parameters:[string(name: 'BUILD_NAME', value: build_name),string(name: 'LAST_BUILD_NAME', value: last_build_name)]
+        }
+    }
+}

@@ -5,12 +5,13 @@ import { RouterAssembler } from "../RouterAssembler";
 import { Router } from "express";
 import { getCustomRepository } from "typeorm";
 
-export const UserRouter = (): RouterAssembler => {
+export const AuthRouter = (): RouterAssembler => {
   const userController = UserController(getCustomRepository(UserRepository));
 
   const router = Router();
 
-  router.route("/").get(userController.getAll);
+  router.route("/signup").post(userController.signUp);
+  router.route("/login").post(userController.getToken);
 
   return { getAssembledRouter: () => router };
 };

@@ -11,6 +11,15 @@ WORKDIR /usr/src/app
 # /usr/src/app, the package*.json will be copied to that dir.
 COPY . .
 
+# Logstash install preparation.
+RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+RUN apt-get install apt-transport-https
+RUN echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-7.x.list
+
+# Install required pacakges.
+RUN apt-get update && apt-get install -y \
+    logstash
+
 # Install npm dependencies and build app.
 RUN npm install
 RUN npm run build
@@ -22,4 +31,4 @@ EXPOSE 8080
 
 # Only one CMD should exist per Dockerfile. It sets the defaults
 # of how an executing container is executed.
-CMD [ "npm", "run", "start" ]
+CMD [ "bash", "start.sh" ]

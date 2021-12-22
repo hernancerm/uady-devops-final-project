@@ -10,15 +10,14 @@ export const StudentRouter = (): RouterAssembler => {
     getCustomRepository(StudentRepository)
   );
 
-  const BASE_PATH = "/students";
-
   const router = Router();
+
   router
-    .route(BASE_PATH)
+    .route("/")
     .get(studentController.getAll)
     .post(studentController.create);
   router
-    .route(`${BASE_PATH}/:studentId`)
+    .route("/:studentId")
     .get(studentController.getById)
     .put(studentController.update)
     .delete(studentController.deleteById);
